@@ -1,2 +1,2 @@
 # despeedy-
-Contains software project and demo 
+Contains software projects and demos
