@@ -1,0 +1,179 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,
+  Vcl.ActnPopup, Vcl.StdStyleActnCtrls, System.Win.TaskbarCore, Vcl.Taskbar,
+  Vcl.JumpList, Vcl.StdCtrls, Vcl.ToolWin, Vcl.ComCtrls;
+
+type
+  TForm1 = class(TForm)
+    PopupActionBar1: TPopupActionBar;
+    Save1: TMenuItem;
+    New1: TMenuItem;
+    Open1: TMenuItem;
+    Close1: TMenuItem;
+    Cut1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    Taskbar1: TTaskbar;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Edit1: TMenuItem;
+    Search1: TMenuItem;
+    View1: TMenuItem;
+    Help1: TMenuItem;
+    new2: TMenuItem;
+    open2: TMenuItem;
+    save2: TMenuItem;
+    saveas2: TMenuItem;
+    close2: TMenuItem;
+    N3: TMenuItem;
+    cut2: TMenuItem;
+    copy1: TMenuItem;
+    paste1: TMenuItem;
+    find1: TMenuItem;
+    findinfiles1: TMenuItem;
+    replace1: TMenuItem;
+    toolbars1: TMenuItem;
+    delphihelp1: TMenuItem;
+    about1: TMenuItem;
+    JumpList1: TJumpList;
+    OpenDialog1: TOpenDialog;
+    Memo1: TMemo;
+    SaveDialog1: TSaveDialog;
+    Copy2: TMenuItem;
+    Paste2: TMenuItem;
+    SaveAs1: TMenuItem;
+    ToolBar1: TToolBar;
+    StatusBar1: TStatusBar;
+    Statusbar2: TMenuItem;
+    Format1: TMenuItem;
+    Format2: TMenuItem;
+    Wordwrap1: TMenuItem;
+    FontDialog1: TFontDialog;
+    procedure Close1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure open2Click(Sender: TObject);
+    procedure saveas2Click(Sender: TObject);
+    procedure Save1Click(Sender: TObject);
+    procedure new2Click(Sender: TObject);
+    procedure Format2Click(Sender: TObject);
+
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure save_as;
+    procedure save;
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Format2Click(Sender: TObject);
+begin
+ if FontDialog1.Execute then
+    memo1.Font:=FontDialog1.Font;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+     {
+  Initialize the dialog filters to open/save *.txt files
+  and also files with arbitrary extension.
+  }
+ OpenDialog1.Filter := 'Text files (*.txt)|*.TXT|Any file (*.*)|*.*';
+ SaveDialog1.Filter := 'Text files (*.txt)|*.TXT|Any file (*.*)|*.*';
+ savedialog1.Options:=[ofOverwritePrompt];
+ form1.Caption:= 'Untitled - ' +form1.Caption;
+ memo1.Clear;
+end;
+
+
+
+procedure TForm1.new2Click(Sender: TObject);
+begin
+ memo1.Clear;
+ form1.Caption:= 'Untitled - Notepad' ;
+end;
+
+procedure TForm1.open2Click(Sender: TObject);
+begin
+        { Execute an open file dialog. }
+  if OpenDialog1.Execute then
+    { First check if the file exists. }
+    if FileExists(OpenDialog1.FileName) then
+      { If it exists, load the data into the memo box. }
+      Memo1.Lines.LoadFromFile(OpenDialog1.FileName) ;
+      {extract the file name}
+    if fileexists(opendialog1.FileName) then
+     form1.Caption:= extractfilename(opendialog1.filename)
+         + ' - Notepad';
+       {save the existing file}
+     if fileexists(opendialog1.FileName) then
+     Memo1.Lines.SaveToFile(openDialog1.FileName)
+
+
+    else
+      { Otherwise, raise an exception. }
+      raise Exception.Create('File does not exist.');
+end;
+
+procedure TForm1.Save1Click(Sender: TObject);
+begin
+{  saving an exiting file  }
+        save;
+end;
+
+procedure TForm1.saveas2Click(Sender: TObject);
+begin
+form1.save_as;
+end;
+
+procedure TForm1.Close1Click(Sender: TObject);
+begin
+form1.Close;
+end;
+
+
+ //public procedure definition
+procedure Tform1.save_as;
+begin
+
+
+    { Execute a save file dialog. }
+  if SaveDialog1.Execute then
+    { First check if the file exists. }
+    if FileExists(SaveDialog1.FileName) then
+      { If it exists, raise an exception. }
+       savedialog1.Options:=[ofOverwritePrompt]
+    else
+      { Otherwise, save the memo box lines into the file. }
+      Memo1.Lines.SaveToFile(saveDialog1.FileName);
+      form1.Caption:= extractfilename(savedialog1.filename)
+         + ' - Notepad';
+
+ form1.save;
+end;
+
+
+
+
+procedure Tform1.save;
+begin
+{saving an existing file}
+ Memo1.Lines.SaveTofile(SaveDialog1.FileName);
+ savedialog1.Options:=[ofcreatePrompt];
+end;
+
+
+end.
